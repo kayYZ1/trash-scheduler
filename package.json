@@ -1,0 +1,24 @@
+{
+	"name": "Kubly",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"cypress:open": "cypress open",
+		"cypress:run": "cypress run",
+		"cypress:run:headed": "cypress run --headed",
+		"cypress:run:chrome": "cypress run --browser chrome",
+		"cypress:run:firefox": "cypress run --browser firefox",
+		"cypress:run:electron": "cypress run --browser electron",
+		"cypress:run:spec": "cypress run --spec 'cypress/e2e/trash-schedule.cy.js'"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"cypress": "^14.0.3"
+	},
+	"dependencies": {
+		"pdf2json": "^3.1.5"
+	}
+}
