@@ -4,6 +4,7 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
+		"start": "node index.js",
 		"cypress:open": "cypress open",
 		"cypress:run": "cypress run",
 		"cypress:run:headed": "cypress run --headed",

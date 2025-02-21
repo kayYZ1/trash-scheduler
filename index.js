@@ -68,7 +68,9 @@ function extractSchedule(pdfPath) {
 
         lines.forEach((text, index) => {
           if (months.includes(text)) {
-            if (tempRow.length) structuredLines.push(tempRow);
+            if (tempRow.length) {
+              structuredLines.push(tempRow);
+            }
             tempRow = [text];
           } else {
             tempRow.push(text);
@@ -86,33 +88,33 @@ function extractSchedule(pdfPath) {
         structuredLines.forEach((row) => {
           let month = row[0].toLowerCase();
 
-          if (months.map((m) => m.toLowerCase()).includes(month)) {
-            currentMonth = month;
-            extractedText[currentMonth] = {
-              czarne: [],
-              zolte: [],
-              zielone: [],
-              niebieskie: [],
-              brazowe: [],
-            };
+          if (!months.includes(month.toUpperCase())) {
+            return;
           }
 
-          if (row.length === 6) {
-            let [_, czarne, zolte, zielone, niebieskie, brazowe] = row;
+          currentMonth = month;
+          extractedText[currentMonth] = {
+            czarne: [],
+            zolte: [],
+            zielone: [],
+            niebieskie: [],
+            brazowe: [],
+          };
 
-            extractedText[currentMonth] = {
-              czarne: parseNumbers(czarne),
-              zolte: parseNumbers(zolte),
-              zielone: parseNumbers(zielone),
-              niebieskie: parseNumbers(niebieskie),
-              brazowe: parseNumbers(brazowe),
-            };
-          }
+          let [_, czarne, zolte, zielone, niebieskie, brazowe] = row;
+
+          extractedText[currentMonth] = {
+            czarne: parseNumbers(czarne),
+            zolte: parseNumbers(zolte),
+            zielone: parseNumbers(zielone),
+            niebieskie: parseNumbers(niebieskie),
+            brazowe: parseNumbers(brazowe),
+          };
         });
       }
     });
 
-    console.log(JSON.stringify(extractedText, null, 2));
+    fs.writeFileSync("schedule.json", JSON.stringify(extractedText, null, 2));
   });
 
   pdfParser.loadPDF(pdfPath);
