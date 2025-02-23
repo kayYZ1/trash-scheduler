@@ -15,7 +15,7 @@ const ScheduleContext = createContext<ScheduleContextType | undefined>(
 );
 
 export const ScheduleProvider = ({ children }: { children: ReactNode }) => {
-  const initialMonth = Object.keys(schedule)[1] as keyof ScheduleType;
+  const initialMonth = Object.keys(schedule)[0] as keyof ScheduleType;
   const [month, setMonth] = useState<keyof ScheduleType>(initialMonth);
   const [currentSchedule, setCurrentSchedule] = useState<
     ScheduleType[keyof ScheduleType]

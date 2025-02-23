@@ -20,9 +20,9 @@ export default function Layout() {
               route.name === "index" ? "home" : "settings";
             return <Ionicons name={iconName} size={size} color={color} />;
           },
-          tabBarActiveTintColor: "tomato",
-          tabBarInactiveTintColor: "gray",
-          tabBarStyle: { paddingBottom: 5, height: 60 },
+          tabBarActiveTintColor: "black",
+          tabBarInactiveTintColor: "lightgray",
+          tabBarStyle: { height: 60 },
         })}
       >
         <Tabs.Screen name="index" options={{ title: "Ekran glowny" }} />
