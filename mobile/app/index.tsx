@@ -1,21 +1,48 @@
-import React, { useState } from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
-import { useRouter } from "expo-router";
+import React from "react";
+import { View, Text, FlatList, StyleSheet } from "react-native";
 
 import MonthSwitcher from "@/lib/components/MonthSwitcher";
+import { useSchedule } from "@/lib/context";
+import { ScheduleColor, ScheduleItem } from "@/lib/types";
+import { colorMap, utilityMap } from "@/lib/utils";
 
 export default function Home() {
-  const router = useRouter();
+  const { schedule, month } = useSchedule();
+
+  const sortedSchedule: ScheduleItem[] = Object.entries(schedule)
+    .flatMap(([color, days]) =>
+      days.map((day) => ({ day, color: color as ScheduleColor })),
+    )
+    .sort((a, b) => a.day - b.day);
 
   return (
     <View style={styles.container}>
       <MonthSwitcher />
       <View style={styles.content}>
-        <Text style={styles.title}>Welcome to the Home Screen</Text>
-        <Button
-          title="Go to Settings"
-          onPress={() => router.push("/settings")}
-        />
+        {sortedSchedule.length === 0 ? (
+          <Text style={styles.emptyText}>No schedule for this month.</Text>
+        ) : (
+          <FlatList
+            data={sortedSchedule}
+            keyExtractor={(item, index) => `${item.color}-${item.day}-${index}`}
+            renderItem={({ item }) => (
+              <View style={styles.itemContainer}>
+                <View style={styles.dayInfo}>
+                  <Text style={styles.dayText}>Day {item.day}</Text>
+                  <View
+                    style={[
+                      styles.underline,
+                      { backgroundColor: colorMap[item.color] },
+                    ]}
+                  />
+                </View>
+                <Text style={styles.colorText}>
+                  {utilityMap[item.color].toUpperCase()}
+                </Text>
+              </View>
+            )}
+          />
+        )}
       </View>
     </View>
   );
@@ -29,12 +56,39 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    padding: 16,
   },
-  title: {
-    fontSize: 24,
+  itemContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 12,
+    marginVertical: 4,
+    backgroundColor: "#f5f5f5",
+    borderRadius: 10,
+  },
+  dayInfo: {
+    flexDirection: "column",
+  },
+  dayText: {
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  underline: {
+    height: 4,
+    width: "100%",
+    marginTop: 4,
+    borderRadius: 2,
+  },
+  colorText: {
+    fontSize: 14,
     fontWeight: "bold",
-    marginBottom: 20,
+    color: "black",
+  },
+  emptyText: {
+    textAlign: "center",
+    fontSize: 16,
+    color: "gray",
+    marginTop: 20,
   },
 });

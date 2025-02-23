@@ -1,43 +1,35 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 import { months } from "../utils";
+import { useSchedule } from "../context";
 
 export default function MonthSwitcher() {
   const currentMonth = new Date().getMonth();
   const [monthIndex, setMonthIndex] = useState(currentMonth);
+  const { changeMonthSchedule } = useSchedule();
+
+  useEffect(() => {
+    changeMonthSchedule(months[monthIndex]);
+  }, [monthIndex]);
 
   const handlePrev = () => {
-    if (monthIndex > 0) {
-      setMonthIndex((prev) => (prev === 0 ? 11 : prev - 1));
-    }
+    setMonthIndex((prev) => (prev === 0 ? 11 : prev - 1));
   };
 
   const handleNext = () => {
-    if (monthIndex < 11) {
-      setMonthIndex((prev) => (prev === 11 ? 0 : prev + 1));
-    }
+    setMonthIndex((prev) => (prev === 11 ? 0 : prev + 1));
   };
 
   return (
     <View style={styles.monthSwitcher}>
-      <TouchableOpacity onPress={handlePrev} disabled={monthIndex === 0}>
-        <Ionicons
-          name="arrow-back-sharp"
-          size={28}
-          color={monthIndex === 0 ? "gray" : "black"}
-        />
+      <TouchableOpacity onPress={handlePrev}>
+        <Ionicons name="arrow-back-sharp" size={28} />
       </TouchableOpacity>
-
-      <Text style={styles.monthText}>{months[monthIndex]}</Text>
-
-      <TouchableOpacity onPress={handleNext} disabled={monthIndex === 11}>
-        <Ionicons
-          name="arrow-forward-sharp"
-          size={28}
-          color={monthIndex === 11 ? "gray" : "black"}
-        />
+      <Text style={styles.monthText}>{months[monthIndex].toUpperCase()}</Text>
+      <TouchableOpacity onPress={handleNext}>
+        <Ionicons name="arrow-forward-sharp" size={28} />
       </TouchableOpacity>
     </View>
   );
