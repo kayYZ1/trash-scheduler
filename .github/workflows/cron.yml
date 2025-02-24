@@ -2,7 +2,7 @@ name: Cron pipeline for Kubly
 
 on:
   schedule:
-    - cron: "0 8 * * *" # Runs every day at 8:00 AM UTC
+    - cron: '0 8 * * *' # Runs every day at 8:00 AM UTC
   push:
     branches:
       - main
@@ -23,11 +23,25 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          cache: "pnpm"
+          node-version: '20'
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install
+
+      - name: Cache Cypress binary
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/Cypress
+          key: cypress-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            cypress-${{ runner.os }}-
+
+      - name: Install Cypress
+        run: pnpm cypress install
+
+      - name: Debug Cypress
+        run: pnpm cypress info
 
       - name: Run cypress
         run: pnpm cypress:run:spec
