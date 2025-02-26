@@ -1,5 +1,4 @@
 import { ColorMap, UtilityMap } from "./types";
-import { Ionicons } from "@expo/vector-icons";
 
 export const colorMap: ColorMap = {
   czarne: "black",

@@ -2,17 +2,21 @@ import { useState, useEffect } from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-import { scheduleMonths } from "../utils";
+import { months, scheduleMonths } from "../utils";
 import { useSchedule } from "../context";
 
+const getCurrentMonthIndex = () => {
+  const currentMonthName = months[new Date().getMonth()];
+  return scheduleMonths.findIndex((month) => month === currentMonthName);
+};
+
 export default function MonthSwitcher() {
-  const currentMonth = (new Date().getMonth() - 2 + 12) % 12; // Adjust to start from March
-  const [monthIndex, setMonthIndex] = useState(currentMonth);
+  const [monthIndex, setMonthIndex] = useState(getCurrentMonthIndex);
   const { changeMonthSchedule } = useSchedule();
 
   useEffect(() => {
     changeMonthSchedule(scheduleMonths[monthIndex]);
-  }, [monthIndex]);
+  }, [monthIndex, changeMonthSchedule]);
 
   const handlePrev = () => {
     setMonthIndex((prev) => (prev === 0 ? 11 : prev - 1));
